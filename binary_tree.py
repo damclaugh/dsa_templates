@@ -118,6 +118,25 @@ class BinaryTree:
         return result[::-1]
 
 
+    def tree_paths(self, node):
+        if not node:
+            return []
+
+        paths = []
+        stack = [(node, str(node.value))]
+        
+        while stack:
+            node, path = stack.pop()
+            if not node.left and not node.right:
+                paths.append(path)
+            if node.left:
+                stack.append((node.left, path + '->' + str(node.left.value)))
+            if node.right:
+                stack.append((node.right, path + '->' + str(node.right.value)))
+        
+        return paths
+
+
     def bfs(self, node):
         queue = []
         visit_order = list()
@@ -196,6 +215,8 @@ class BinaryTree:
 
 
 
+
+
 tree = BinaryTree(1)
 tree.root.left = TreeNode(2)
 tree.root.right = TreeNode(3)
@@ -210,8 +231,10 @@ print(tree.inorder(root))
 print(tree.inorder_rec(root))
 print(tree.postorder_rec(root))
 print(tree.postorder(root))
+print(tree.tree_paths(root))
 print(tree.bfs(root))
 print(tree.max_depth(root))
 print(tree.max_depth_top(root))
 print(tree.max_depth_bottom(root))
 print(tree.size())
+
