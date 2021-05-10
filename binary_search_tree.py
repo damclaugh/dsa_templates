@@ -21,6 +21,7 @@
 #    1   13   11   15
 # 13 is > 12 so shouldn't be in left tree (if 13 was 2 also not valid bst)
 
+# Search complexity is O(log n)
 # Insertion is O(log n) in average case, O(n) in worst case
 
 
@@ -155,7 +156,7 @@ class Tree:
         return self.inorder_trav(self.root, "")
         
     def inorder_trav(self, root, trav):
-        # left -> right -> root
+        # left -> root -> right
         if root is None:
             return
 
@@ -254,6 +255,28 @@ def validate_bst_trav(root):
             return False
     return True
 
+# valid bst test from IC
+def is_binary_search_tree(root):
+    # start at root
+    node_and_bounds = [(root, -float('inf'), float('inf'))]
+
+    # dfs traversal
+    while len(node_and_bounds):
+        node, lower_bound, upper_bound = node_and_bounds.pop()
+
+        if node.value <= lower_bound or node.value >= upper_bound:
+            return False
+        
+        # left must be < current node
+        if node.left:
+            node_and_bounds.append((node.left, lower_bound, node.value))
+
+        # right must be > current node
+        if node.right:
+            node_and_bounds.append((node.right, node.value, upper_bound))
+
+    return True
+
 
 # TEST CASES
 root = TreeNode(5)
@@ -263,12 +286,14 @@ root.right.left = TreeNode(8)
 root.right.right = TreeNode(15)
 print('Valid BST?', validate_bst(root)) # prints True
 print('Valid BST?', validate_bst_trav(root)) # prints True
+print('Valid BST?', is_binary_search_tree(root)) # prints True
 
 
 elements = [17, 4, 1, 20, 9, 23, 18, 34]
 tree = Tree()
 tree.build_tree(elements)
 print('Valid BST?', validate_bst_trav(tree.root)) # prints True
+print('Valid BST?', is_binary_search_tree(root)) # prints True
 print('Tree nodes: ', tree.print_tree()) # prints 1->4->9->17->18->20->23->34->
 print('Minimum value: ', tree.find_min()) # prints 1
 print('Is 20 in tree?', tree.search(20)) # prints True

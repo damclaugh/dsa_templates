@@ -14,7 +14,7 @@ class Queue:
         self.items.append(item)
     
     def dequeue(self):
-        return self.items.pop(0)
+        self.items.pop(0)
 
     def size(self):
         return len(self.items)
@@ -42,14 +42,12 @@ q.display() # prints [3, 5]
 # LIFO data structure
 # push/append to the top to add element
 # pop from the top to remove element
+# pop and push take O(1) time
 
 class Stack:
     def __init__(self):
         self.items = []
     
-    def size(self):
-        return len(self.items)
-
     def push(self, item):
         self.items.append(item)
     
@@ -57,7 +55,10 @@ class Stack:
         if self.size() == 0:
             return None
         else:
-            return self.items.pop()
+            self.items.pop()
+
+    def size(self):
+        return len(self.items)
 
     def display(self):
         print(self.items)

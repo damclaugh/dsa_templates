@@ -118,6 +118,7 @@ class BinaryTree:
         return result[::-1]
 
 
+    # paths from root to leaves
     def tree_paths(self, node):
         if not node:
             return []
