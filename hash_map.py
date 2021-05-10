@@ -6,8 +6,6 @@
 # insert, lookup and delete are O(1) time complexity on average; O(n) in worst case
 
 
-initial_capacity = 13
-
 class Node:
     def __init__(self, key, value):
         self.key = key
@@ -15,7 +13,7 @@ class Node:
         self.next = None
 
 class HashMap:
-    def __init__(self):
+    def __init__(self, initial_capacity=13):
         self.capacity = initial_capacity
         self.bucket = [None for item in range(self.capacity)]
 
