@@ -115,6 +115,8 @@ class LinkedList:
         if cur_node is None: # value isn't in list
             return
         
+        # found value
+        # previous points "over" current to next
         prev_node.next = cur_node.next
         cur_node = None
 
@@ -165,6 +167,27 @@ class LinkedList:
             current = nxt
         self.head = previous # reset head
 
+    def detect_loop(self):
+        s = set()
+        temp = self.head
+        while temp:
+            if temp in s:
+                return True
+            s.add(temp)
+            temp = temp.next
+        return False
+    
+    def detect_loop2(self):
+        out = []
+        temp = self.head
+        while temp:
+            if temp in out:
+                return True
+            out.append(temp)
+            temp = temp.next
+        return False
+
+
 
 llist = LinkedList()
 llist.append('A')
@@ -188,3 +211,12 @@ llist.reverse_list()
 print(llist.to_list()) # ['D', 'C', 'E', 'A']
 llist.prepend('Z')
 print(llist.to_list()) # ['Z', 'D', 'C', 'E', 'A']
+
+llist2 = LinkedList()
+llist2.append(20)
+llist2.append(4)
+llist2.append(15)
+llist2.append(10)
+llist2.head.next.next.next.next = llist2.head
+print(llist2.detect_loop2())
+
