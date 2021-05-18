@@ -59,9 +59,9 @@ class BinaryTree:
         while stack != []:
             node = stack.pop()
             result.append(node.value)
-            if node.right is not None:
+            if node.right:
                 stack.append(node.right)
-            if node.left is not None:
+            if node.left:
                 stack.append(node.left)
     
         return result
@@ -89,6 +89,7 @@ class BinaryTree:
             node = stack.pop()
             result.append(node.value)
             node = node.right
+        
         return result
 
     # left -> right -> root
@@ -110,9 +111,9 @@ class BinaryTree:
         while stack != []:
             node = stack.pop()
             result.append(node.value)
-            if node.left is not None:
+            if node.left:
                 stack.append(node.left)
-            if node.right is not None:
+            if node.right:
                 stack.append(node.right)
         
         return result[::-1]
@@ -140,7 +141,7 @@ class BinaryTree:
 
     def bfs(self, node):
         queue = []
-        visit_order = list()
+        visit_order = []
         queue.append(node)
         
         while(len(queue) > 0):
@@ -216,8 +217,6 @@ class BinaryTree:
 
 
 
-
-
 tree = BinaryTree(1)
 tree.root.left = TreeNode(2)
 tree.root.right = TreeNode(3)
@@ -226,16 +225,16 @@ tree.root.left.right = TreeNode(5)
 tree.root.right.left = TreeNode(6)
 tree.root.right.right = TreeNode(7)
 root = tree.get_root()
-print(tree.preorder_rec(root))
-print(tree.preorder(root))
-print(tree.inorder(root))
-print(tree.inorder_rec(root))
-print(tree.postorder_rec(root))
-print(tree.postorder(root))
-print(tree.tree_paths(root))
-print(tree.bfs(root))
-print(tree.max_depth(root))
-print(tree.max_depth_top(root))
-print(tree.max_depth_bottom(root))
-print(tree.size())
+print(tree.preorder_rec(root)) # [1, 2, 4, 5, 3, 6, 7]
+print(tree.preorder(root)) # [1, 2, 4, 5, 3, 6, 7]
+print(tree.inorder(root)) # [4, 2, 5, 1, 6, 3, 7]
+print(tree.inorder_rec(root)) # [4, 2, 5, 1, 6, 3, 7]
+print(tree.postorder_rec(root)) # [4, 5, 2, 6, 7, 3, 1]
+print(tree.postorder(root)) # [4, 5, 2, 6, 7, 3, 1]
+print(tree.tree_paths(root)) # ['1->3->7', '1->3->6', '1->2->5', '1->2->4']
+print(tree.bfs(root)) # [1, 2, 3, 4, 5, 6, 7]
+print(tree.max_depth(root)) # 3
+print(tree.max_depth_top(root)) # 3
+print(tree.max_depth_bottom(root)) # 3
+print(tree.size()) # 7
 

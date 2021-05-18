@@ -79,7 +79,7 @@ class HashMap:
             else:
                 prev.next = prev.next.next
 
-    # Helper function to see the hashmap
+    # helper function to see the hashmap
     def __repr__(self):
         output = "\nHash map:"
 
@@ -106,8 +106,7 @@ t.add('March 19', 173)
 t.add('March 31', 142)
 print(t.find('March 6')) # prints 130
 
-print(t)
-# prints: 
+print(t) 
 # Hash map:
 # [0] (March 1, 127) 
 # [1] 
