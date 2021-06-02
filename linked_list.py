@@ -22,10 +22,10 @@ class LinkedList:
     # outputs to list
     def to_list(self):
         out_list = []
-        node = self.head
-        while node:
-            out_list.append(node.value)
-            node = node.next
+        cur_node = self.head
+        while cur_node:
+            out_list.append(cur_node.value)
+            cur_node = cur_node.next
         
         return out_list
 
@@ -100,7 +100,7 @@ class LinkedList:
         cur_node = self.head
 
         # deletes head node
-        if cur_node and cur_node.value == value:
+        if cur_node.value == value:
             self.head = cur_node.next
             cur_node = None
             return
@@ -119,6 +119,30 @@ class LinkedList:
         # previous points "over" current to next
         prev_node.next = cur_node.next
         cur_node = None
+
+    # alternative delete method if value to be deleted appears more than once
+    def delete_node2(self, value):
+        cur_node = self.head
+        prev_node = None
+
+        while cur_node:
+            # if value found, skip over it and keep going
+            if cur_node.value == value:
+                if prev_node:
+                    prev_node.next = cur_node.next
+                    cur_node.next = None
+                    cur_node = prev_node.next
+                    
+                else: # still at the head
+                    self.head = cur_node.next
+                    cur_node = self.head
+            else:
+                prev_node = cur_node
+                cur_node = cur_node.next
+
+        if cur_node is None: # value isn't in list
+            return
+
 
     # delete at index
     def delete_pos(self, pos):
@@ -157,15 +181,18 @@ class LinkedList:
             print('Position not in list')
             return
 
+    # A -> B -> C 
+    # if on B, B.next should point to A
     def reverse_list(self):
-        previous = None
-        current = self.head
-        while current:
-            nxt = current.next # temporary pointer to point to next node
-            current.next = previous # flips arrow
-            previous = current # makes current node the previous node
-            current = nxt
-        self.head = previous # reset head
+        cur_node = self.head
+        prev_node = None
+       
+        while cur_node:
+            nxt = cur_node.next # temporary pointer to point to next node
+            cur_node.next = prev_node # flips arrow
+            prev_node = cur_node # makes current node the previous node
+            cur_node = nxt
+        self.head = prev_node # reset head so it points to C (A <- B <- C)
 
     def detect_loop(self):
         s = set()
@@ -211,6 +238,16 @@ llist.reverse_list()
 print(llist.to_list()) # ['D', 'C', 'E', 'A']
 llist.prepend('Z')
 print(llist.to_list()) # ['Z', 'D', 'C', 'E', 'A']
+llist.append('D')
+print(llist.to_list()) # ['Z', 'D', 'C', 'E', 'A', 'D']
+llist.delete_node2('D')
+print(llist.to_list()) # ['Z', 'C', 'E', 'A']
+llist.delete_node2('Z')
+print(llist.to_list()) # ['C', 'E', 'A']
+llist.append('A')
+print(llist.to_list()) # ['C', 'E', 'A', 'A']
+llist.delete_node2('A')
+print(llist.to_list()) # ['C', 'E']
 
 llist2 = LinkedList()
 llist2.append(20)
@@ -218,5 +255,5 @@ llist2.append(4)
 llist2.append(15)
 llist2.append(10)
 llist2.head.next.next.next.next = llist2.head
-print(llist2.detect_loop2())
+print(llist2.detect_loop2()) # True
 
