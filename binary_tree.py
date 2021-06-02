@@ -125,36 +125,74 @@ class BinaryTree:
             return []
 
         paths = []
-        stack = [(node, str(node.value))]
+        stack = [(node, [node.value])]
         
         while stack:
             node, path = stack.pop()
             if not node.left and not node.right:
                 paths.append(path)
             if node.left:
-                stack.append((node.left, path + '->' + str(node.left.value)))
+                stack.append((node.left, path + [node.left.value]))
             if node.right:
-                stack.append((node.right, path + '->' + str(node.right.value)))
+                stack.append((node.right, path + [node.right.value]))
         
         return paths
 
+        ## With arrow formatting ##
+        # if not node:
+        #     return []
+
+        # paths = []
+        # stack = [(node, str(node.value))]
+        
+        # while stack:
+        #     node, path = stack.pop()
+        #     if not node.left and not node.right:
+        #         paths.append(path)
+        #     if node.left:
+        #         stack.append((node.left, path + '->' + str(node.left.value)))
+        #     if node.right:
+        #         stack.append((node.right, path + '->' + str(node.right.value)))
+        
+        # return paths
+
+
+    # sums of root-to-leaf paths
+    def path_sums(self, node):
+        if not node:
+            return []
+
+        path_sums = []
+        stack = [(node, node.value)]
+        
+        while stack:
+            node, path_sum = stack.pop()
+            if not node.left and not node.right:
+                path_sums.append(path_sum)
+            if node.left:
+                stack.append((node.left, path_sum + node.left.value))
+            if node.right:
+                stack.append((node.right, path_sum + node.right.value))
+        
+        return path_sums
+
 
     def bfs(self, node):
-        queue = []
-        visit_order = []
-        queue.append(node)
         
-        while(len(queue) > 0):
+        queue = [node]
+        result = []
+        
+        while queue != []:
             node = queue.pop(0)
             # visit that node
-            visit_order.append(node.value)
+            result.append(node.value)
             # add left or right child if it exists
             if node.left:
                 queue.append(node.left)
             if node.right:
                 queue.append(node.right)
 
-        return visit_order
+        return result
 
 
     # iterative solution
@@ -232,9 +270,11 @@ print(tree.inorder_rec(root)) # [4, 2, 5, 1, 6, 3, 7]
 print(tree.postorder_rec(root)) # [4, 5, 2, 6, 7, 3, 1]
 print(tree.postorder(root)) # [4, 5, 2, 6, 7, 3, 1]
 print(tree.tree_paths(root)) # ['1->3->7', '1->3->6', '1->2->5', '1->2->4']
+print(tree.path_sums(root)) # [11, 10, 8, 7]
 print(tree.bfs(root)) # [1, 2, 3, 4, 5, 6, 7]
 print(tree.max_depth(root)) # 3
 print(tree.max_depth_top(root)) # 3
 print(tree.max_depth_bottom(root)) # 3
 print(tree.size()) # 7
+
 

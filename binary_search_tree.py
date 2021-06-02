@@ -51,11 +51,11 @@ class Tree:
         if self.root is None:
             self.root = TreeNode(value)
         else:
-            self._insert(self.root, value)
+            self._insert(value)
 
     # method for iterative insertion
-    def _insert(self, root, value):
-        node = root
+    def _insert(self, value):
+        node = self.root
 
         # traverse down tree to find insertion point
         while node:

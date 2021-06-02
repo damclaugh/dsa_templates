@@ -51,11 +51,20 @@ class Stack:
     def push(self, item):
         self.items.append(item)
     
+    # remove and return last item
     def pop(self):
         if self.size() == 0:
             return None
         else:
             self.items.pop()
+
+    # get last item w/o removing it
+    def peek(self):
+        if self.size() == 0:
+            return None
+
+        return self.items[-1]
+
 
     def size(self):
         return len(self.items)
