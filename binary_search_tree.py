@@ -1,17 +1,17 @@
 
 # BST implementation with insert, search, delete methods
 
-# Each node value must be > values stored in its left subtree
-# Each node value must be < values stored in its right subtree.
+# each node value must be > values stored in its left subtree
+# each node value must be < values stored in its right subtree.
 
-# Inorder traversal (left -> root -> right) most frequent traversal method
+# inorder traversal (left -> root -> right) most frequent traversal method
 
 # valid bst:
 #           8
 #         /   \ 
-#       3       10
-#     /   \    /  \
-#    1     6  9    11
+#        3     10
+#       / \   /  \
+#      1   6 9   11
 
 # not valid bst
 #           12
@@ -21,8 +21,8 @@
 #    1   13   11   15
 # 13 is > 12 so shouldn't be in left tree (if 13 was 2 also not valid bst)
 
-# Search complexity is O(log n)
-# Insertion is O(log n) in average case, O(n) in worst case
+# search complexity is O(log n)
+# insertion is O(log n) in average case, O(n) in worst case
 
 
 import math
@@ -50,20 +50,15 @@ class Tree:
     def insert(self, value):
         if self.root is None:
             self.root = TreeNode(value)
-        else:
-            self._insert(value)
+            return
 
-    # method for iterative insertion
-    def _insert(self, value):
         node = self.root
-
         # traverse down tree to find insertion point
         while node:
             parent = node
-
             if value < node.value:
                 node = node.left
-            elif value > node.value:
+            else:
                 node = node.right
 
         # insert value to the left if < parent
@@ -72,8 +67,6 @@ class Tree:
             parent.left = TreeNode(value)
         else:
             parent.right = TreeNode(value)
-
-        return root
 
     def insert_rec(self, value):
         # if tree is empty
@@ -96,8 +89,6 @@ class Tree:
             else:
                 self._insert_rec(node.right, value)
 
-        return
-
     def search(self, value):
         node = self.root
         if node.value == value:
@@ -112,27 +103,6 @@ class Tree:
             else:
                 return True
         return False
-
-    def search_rec(self, value):
-        if self.root:
-            found = self._search_rec(self.root, value)
-            if found:
-                return True
-            else:
-                return False
-        else:
-            return None
-
-    # method for recursive search
-    def _search_rec(self, node, value):
-        if value > node.value and node.right:
-            return self._search_rec(node.right, value)
-
-        elif value < node.value and node.left:
-            return self._search_rec(node.left, value)
-        
-        if value == node.value:
-            return True
 
     def find_min(self):
         node = self.root
@@ -151,154 +121,111 @@ class Tree:
             node = node.right
         
         return node.value
-
-    def print_tree(self):
-        return self.inorder_trav(self.root, "")
-        
-    def inorder_trav(self, root, trav):
-        # left -> root -> right
-        if root is None:
-            return
-
-        if root.left:
-            trav = self.inorder_trav(root.left, trav)
-        trav += (str(root.value) + '->')
-        if root.right:
-            trav = self.inorder_trav(root.right, trav)
-
-        return trav
-
-    def delete(self, value):
-        return self._delete(self.root, value)
     
-    def successor(self, node):
-        node = node.right
-        while node.left:
-            node = node.left
-        return node.value
-
-    def predecessor(self, node):
-        node = node.left
-        while node.right:
-            node = node.right
-        return node.value
-    
-    # solution from https://leetcode.com/problems/delete-node-in-a-bst/solution/
-    def _delete(self, node, value):
-        if not node:
-            return None
-
-        if value > node.value:
-            node.right = self._delete(node.right, value)
-
-        elif value < node.value:
-            node.left = self._delete(node.left, value)
-        
-        # delete current node
-        else:
-            # node is a leaf
-            if not (node.left or node.right):
-                node = None
-            # node is not a leaf and has right child (could have left and right child)
-            # replace node with successor
-            # then delete successor
-            elif node.right:
-                node.value = self.successor(node)
-                node.right = self._delete(node.right, node.value)
-            # node is not a leaf, has no right child, and has left child
-            # replace node with predecessor
-            # delete predecessor
-            else:
-                node.value = self.predecessor(node)
-                node.left = self._delete(node.left, node.value)
-
-        return node
-
-# checks if tree is a valid BST
-def validate_bst(root, min = -math.inf, max = math.inf):
-    if root is None:
-        return True
-
-    if (root.value > min and 
-        root.value < max and
-        validate_bst(root.left, min, root.value) and
-        validate_bst(root.right, root.value, max)):
-        return True
-    else:
-        return False
-
-# another function to check if tree is a valid BST
-def validate_bst2(root):
-    def check(root, l, r):
-        if root is None:
-            return True
-        value = root.value
-        if value <= l or value >= r:
-            return False
-        return check(root.left, l, value) and check(root.right, value, r)
-    return check(root, -math.inf, math.inf)
-
-# validates with inorder traversal
-# if valid bst, list of nodes will be in increasing order
-def validate_bst_trav(root):
-    q = []
-    def inorder_dfs(node):
+    # left -> root -> right
+    # prints node value in increasing order
+    def inorder_trav(self, node):
         if node is None:
-            return True
-        inorder_dfs(node.left)
-        q.append(node.value)
-        inorder_dfs(node.right)
-    inorder_dfs(root)
-
-    for i in range(len(q)-1):
-        if q[i] > q[i+1]:
-            return False
-    return True
-
-# valid bst test from IC
-def is_binary_search_tree(root):
-    # start at root
-    node_and_bounds = [(root, -float('inf'), float('inf'))]
-
-    # dfs traversal
-    while len(node_and_bounds):
-        node, lower_bound, upper_bound = node_and_bounds.pop()
-
-        if node.value <= lower_bound or node.value >= upper_bound:
-            return False
+            return []
         
-        # left must be < current node
-        if node.left:
-            node_and_bounds.append((node.left, lower_bound, node.value))
+        stack = []
+        result = []
 
-        # right must be > current node
-        if node.right:
-            node_and_bounds.append((node.right, node.value, upper_bound))
+        while node is not None or stack != []:
+            while node is not None:
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            result.append(node.value)
+            node = node.right
+        
+        return result
 
-    return True
 
+    def delete(self, root, value):
+        node = root
+        parent = None
 
-# TEST CASES
-root = TreeNode(5)
-root.left = TreeNode(4)
-root.right = TreeNode(10)
-root.right.left = TreeNode(8)
-root.right.right = TreeNode(15)
-print('Valid BST?', validate_bst(root)) # prints True
-print('Valid BST?', validate_bst_trav(root)) # prints True
-print('Valid BST?', is_binary_search_tree(root)) # prints True
+        # search for node
+        while node and node.value != value:
+            parent = node
+            if value < node.value:
+                node = node.left
+            else:
+                node = node.right
+        
+        if node is None: # value not in tree
+            return root
+
+        # node found
+        # deletion: 4 cases
+        # 1) node is leaf node
+        if node.left is None and node.right is None:
+            new = None
+        
+        # 2) node has right child only
+        elif node.left is None:
+            new = node.right
+
+        # 3) node has left child only
+        elif node.right is None:
+            new = node.left
+
+        # 4) node has two children
+        # make the right subtree the main branch
+        # insert the former left branch at the left-most available position
+        else:
+            new = node.right
+            n2 = new
+            # find left-most side of node.right
+            while n2.left is not None:
+                n2 = n2.left
+            # place node.left at the left-most position of the new subtree
+            n2.left = node.left
+
+        # insert new node from aboce to replace node to be deleted
+        if parent is None: # root node deleted
+            return new
+        
+        if parent.left == node:
+            parent.left = new
+        
+        else:
+            parent.right = new
+        
+        return root
+ 
+    # validates with inorder traversal
+    # if valid bst, list of nodes will be in increasing order
+    def validate_bst_trav(self):
+        stack = []
+        result = []
+        node = self.root
+        
+        while node is not None or stack != []:
+            while node is not None:
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            if result != [] and node.value <= result[-1]:
+                return False
+            result.append(node.value)
+            node = node.right
+        
+        return True
+
 
 
 elements = [17, 4, 1, 20, 9, 23, 18, 34]
 tree = Tree()
 tree.build_tree(elements)
-print('Valid BST?', validate_bst_trav(tree.root)) # prints True
-print('Valid BST?', is_binary_search_tree(root)) # prints True
-print('Tree nodes: ', tree.print_tree()) # prints 1->4->9->17->18->20->23->34->
-print('Minimum value: ', tree.find_min()) # prints 1
-print('Is 20 in tree?', tree.search(20)) # prints True
-print('Is 34 in tree?', tree.search_rec(34)) # prints True
-print('Deleting 20')
-tree.delete(20)
-print('Is 20 in tree?', tree.search(20)) # prints False
+root = tree.get_root()
+print(tree.validate_bst_trav()) # True
+print(tree.inorder_trav(root))
+print(tree.find_min()) # 1
+print(tree.find_max()) # 34
+print(tree.search(20)) # True
+print(tree.search_rec(34)) # True
+tree.delete(root, 20)
+print('Is 20 in tree?', tree.search(20)) # False
 
