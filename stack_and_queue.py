@@ -4,11 +4,15 @@
 # enqueue/append to the end to add element
 # dequeue/pop at the front to remove element
 
-# enqueue and dequeue take O(1) time
+# enqueue is O(1) time complexity
+# dequeue is O(n) time complexity
 
 class Queue:
     def __init__(self):
         self.items = []
+
+    def is_empty(self):
+        return self.size() == 0
 
     def enqueue(self, item):
         self.items.append(item)
@@ -20,7 +24,7 @@ class Queue:
         return len(self.items)
 
     def display(self):
-        print(self.items)
+        return self.items
 
 
 
@@ -30,11 +34,12 @@ q.enqueue(1)
 q.enqueue(3)
 q.enqueue(5)
 
-print(q.size()) # prints 3
-q.display() # prints [1, 3, 5]
+print(q.size()) # 3
+q.display() # [1, 3, 5]
 q.dequeue()
-print(q.size()) # prints 2
-q.display() # prints [3, 5]
+print(q.is_empty()) # False
+print(q.size()) # 2
+q.display() # [3, 5]
 
 
 
@@ -47,6 +52,9 @@ q.display() # prints [3, 5]
 class Stack:
     def __init__(self):
         self.items = []
+
+    def is_empty(self):
+        return self.size() == 0
     
     def push(self, item):
         self.items.append(item)
@@ -65,20 +73,20 @@ class Stack:
 
         return self.items[-1]
 
-
     def size(self):
         return len(self.items)
 
     def display(self):
-        print(self.items)
+        return self.items
 
 
 # TEST CASES
 s = Stack()
 s.push(1)
+print(s.is_empty()) # False
 s.push(2)
 s.push(3)
-s.display() # prints [1, 2, 3]
-print(s.size()) # prints 3
+s.display() # [1, 2, 3]
+print(s.size()) # 3
 s.pop()
-s.display() # prints [1, 2]
+s.display() # [1, 2]
