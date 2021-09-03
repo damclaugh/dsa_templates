@@ -373,8 +373,6 @@ class BinaryTree:
             stack = level
 
 
-
-
 tree = BinaryTree(1)
 tree.root.left = TreeNode(2)
 tree.root.right = TreeNode(3)
