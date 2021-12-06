@@ -8,7 +8,7 @@ def binary_search(array, target):
     end_index = len(array) - 1
 
     while start_index <= end_index:
-        mid_index = start_index + (end_index - start_index) // 2
+        mid_index = (start_index + end_index) // 2
 
         if array[mid_index] == target:
             return mid_index
@@ -23,10 +23,10 @@ def binary_search(array, target):
 
 # TEST CASES
 nums = [-1, 0, 3, 5, 9, 12]
-print(binary_search(nums, 9)) # prints 4
+print(binary_search(nums, 9)) # 4
 
 nums = [-10, -9, -1, 0, 3, 5, 9, 27]
-print(binary_search(nums, -10)) # prints 0
+print(binary_search(nums, -10)) # 0
 
 
 
