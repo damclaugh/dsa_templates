@@ -91,17 +91,15 @@ class Tree:
 
     def search(self, value):
         node = self.root
-        if node.value == value:
-            return True
-        
-        # traverse down tree looking for value
+
         while node is not None:
+            if node.value == value:
+                return True
             if value < node.value:
                 node = node.left
-            elif value > node.value:
-                node = node.right
             else:
-                return True
+                node = node.right
+        
         return False
 
     def find_min(self):
@@ -140,7 +138,6 @@ class Tree:
             node = node.right
         
         return result
-
 
     def delete(self, root, value):
         node = root
@@ -225,7 +222,7 @@ print(tree.inorder_trav(root))
 print(tree.find_min()) # 1
 print(tree.find_max()) # 34
 print(tree.search(20)) # True
-print(tree.search_rec(34)) # True
+print(tree.search(34)) # True
 tree.delete(root, 20)
 print('Is 20 in tree?', tree.search(20)) # False
 
