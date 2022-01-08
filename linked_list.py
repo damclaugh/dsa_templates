@@ -2,7 +2,6 @@
 
 # lookup, insert and delete are O(n) time
 
-
 class Node:
     def __init__(self, value):
         self.value = value
@@ -37,10 +36,10 @@ class LinkedList:
             self.head = new_node
             return
 
-        node = self.head
-        while node.next:
-            node = node.next
-        node.next = new_node
+        cur_node = self.head
+        while cur_node.next:
+            cur_node = cur_node.next
+        cur_node.next = new_node
 
     # add to beginning of list
     def prepend(self, value):
@@ -97,30 +96,20 @@ class LinkedList:
         return False
 
     def delete_node(self, value):
-        cur_node = self.head
-
-        # deletes head node
-        if cur_node.value == value:
-            self.head = cur_node.next
-            cur_node = None
-            return
-
-        # to delete a different node
-        # loop through list
-        prev_node = None
-        while cur_node and cur_node.value != value:
-            prev_node = cur_node
-            cur_node = cur_node.next
-
-        if cur_node is None: # value isn't in list
-            return
+        # deletes value if it's at the head
+        while self.head is not None and self.head.value == value:
+            self.head = self.head.next
         
-        # found value
-        # previous points "over" current to next
-        prev_node.next = cur_node.next
-        cur_node = None
+        cur_node = self.head
+        while cur_node and cur_node.next:
+            if cur_node.next.value == value:
+                cur_node.next = cur_node.next.next
+            else:
+                cur_node = cur_node.next
+            
+        return self.head
 
-    # alternative delete method if value to be deleted appears more than once
+    # alternative delete method
     def delete_node2(self, value):
         cur_node = self.head
         prev_node = None
@@ -128,7 +117,7 @@ class LinkedList:
         while cur_node:
             # if value found, skip over it and keep going
             if cur_node.value == value:
-                if prev_node:
+                if prev_node: # in the middle of the list somewhere
                     prev_node.next = cur_node.next
                     cur_node.next = None
                     cur_node = prev_node.next
@@ -142,7 +131,6 @@ class LinkedList:
 
         if cur_node is None: # value isn't in list
             return
-
 
     # delete at index
     def delete_pos(self, pos):
@@ -196,23 +184,17 @@ class LinkedList:
 
     def detect_loop(self):
         s = set()
-        temp = self.head
-        while temp:
-            if temp in s:
+        cur_node = self.head
+        
+        while cur_node:
+            if cur_node in s:
                 return True
-            s.add(temp)
-            temp = temp.next
+            s.add(cur_node)
+            cur_node = cur_node.next
+        
         return False
+
     
-    def detect_loop2(self):
-        out = []
-        temp = self.head
-        while temp:
-            if temp in out:
-                return True
-            out.append(temp)
-            temp = temp.next
-        return False
 
 
 
@@ -240,9 +222,9 @@ llist.prepend('Z')
 print(llist.to_list()) # ['Z', 'D', 'C', 'E', 'A']
 llist.append('D')
 print(llist.to_list()) # ['Z', 'D', 'C', 'E', 'A', 'D']
-llist.delete_node2('D')
+llist.delete_node('D')
 print(llist.to_list()) # ['Z', 'C', 'E', 'A']
-llist.delete_node2('Z')
+llist.delete_node('Z')
 print(llist.to_list()) # ['C', 'E', 'A']
 llist.append('A')
 print(llist.to_list()) # ['C', 'E', 'A', 'A']
@@ -255,5 +237,19 @@ llist2.append(4)
 llist2.append(15)
 llist2.append(10)
 llist2.head.next.next.next.next = llist2.head
-print(llist2.detect_loop2()) # True
+print(llist2.detect_loop()) # True
+
+llist3 = LinkedList()
+llist3.append(1)
+llist3.append(1)
+llist3.append(1)
+llist3.append(1)
+llist3.append(2)
+llist3.append(2)
+llist3.delete_node(1)
+print(llist3.to_list()) # [2,2]
+
+
+
+
 
