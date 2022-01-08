@@ -42,10 +42,22 @@ class BinaryTree:
     # root -> left -> right
     # recursive solution
     def preorder_rec(self, node):
-        if node is None:
-            return []
+        
+        def dfs(node):
+            if node:
+                result.append(node.value)
+                dfs(node.left)
+                dfs(node.right)
+        
+        result = []
+        dfs(node)
+        return result
+        
+        ## alt method:
+        # if node is None:
+        #     return []
 
-        return [node.value] + self.preorder_rec(node.left) + self.preorder_rec(node.right)
+        # return [node.value] + self.preorder_rec(node.left) + self.preorder_rec(node.right)
 
     # root -> left -> right
     # iterative solution
@@ -58,7 +70,7 @@ class BinaryTree:
         
         # add right value to stack and then left 
         # then when you pop from the stack, you get the left first
-        while stack != []:
+        while stack:
             node = stack.pop()
             result.append(node.value)
             if node.right:
@@ -71,10 +83,22 @@ class BinaryTree:
     # left -> root -> right
     # recursive solution
     def inorder_rec(self, node):
-        if node is None:
-            return []
 
-        return self.inorder_rec(node.left) + [node.value] + self.inorder_rec(node.right)
+        def dfs(node):
+            if node:
+                dfs(node.left)
+                result.append(node.value)
+                dfs(node.right)
+        
+        result = []
+        dfs(node)
+        return result
+
+        ## alt method
+        # if node is None:
+        #     return []
+
+        # return self.inorder_rec(node.left) + [node.value] + self.inorder_rec(node.right)
 
     # left -> root -> right
     # iterative solution
@@ -98,10 +122,22 @@ class BinaryTree:
     # left -> right -> root
     # recursive solution
     def postorder_rec(self, node):
-        if node is None:
-            return []
+        
+        def dfs(node):
+            if node:
+                dfs(node.left)
+                dfs(node.right)
+                result.append(node.value)
+        
+        result = []
+        dfs(node)
+        return result
+        
+        ## alt method    
+        # if node is None:
+        #     return []
 
-        return self.postorder_rec(node.left) + self.postorder_rec(node.right) + [node.value]
+        # return self.postorder_rec(node.left) + self.postorder_rec(node.right) + [node.value]
 
     # left -> right -> root
     # iterative solution
@@ -112,7 +148,7 @@ class BinaryTree:
         stack = [node]
         result = []
 
-        while stack != []:
+        while stack:
             node = stack.pop()
             result.append(node.value)
             if node.left:
@@ -126,35 +162,35 @@ class BinaryTree:
     # breadth-first search
     def bfs(self, node):
         
-        queue = [node]
-        result = []
+        # queue = [node]
+        # result = []
         
-        while queue != []:
-            node = queue.pop(0)
-            result.append(node.value)
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
+        # while queue:
+        #     node = queue.pop(0)
+        #     result.append(node.value)
+        #     if node.left:
+        #         queue.append(node.left)
+        #     if node.right:
+        #         queue.append(node.right)
 
-        return result
+        # return result
 
         # # # separate lists for each level
-        # queue = [node]  
-        # result = []
-        # while queue != []:
-        #     level = []
-        #     next_queue = []
-        #     for node in queue:
-        #         level.append(node.value)
-        #         if node.left:
-        #             next_queue.append(node.left)
-        #         if node.right:
-        #             next_queue.append(node.right)
-        #     result.append(level)
-        #     queue = next_queue
+        queue = [node]  
+        result = []
+        while queue:
+            level = []
+            next_queue = []
+            for node in queue:
+                level.append(node.value)
+                if node.left:
+                    next_queue.append(node.left)
+                if node.right:
+                    next_queue.append(node.right)
+            result.append(level)
+            queue = next_queue
                 
-        # return result
+        return result
 
     
     # leaf nodes
@@ -163,7 +199,7 @@ class BinaryTree:
         stack = [node]
         result = []
 
-        while stack != []:
+        while stack:
             node = stack.pop()
             if node.left is None and node.right is None:
                 result.append(node.value)
@@ -233,15 +269,6 @@ class BinaryTree:
         
         return path_sums
 
-    def height_rec(self, node):
-        if node is None:
-            return 0 # change to -1 if node itself is considered level 0
-        
-        left_height = self.height_rec(node.left)
-        right_height = self.height_rec(node.right)
-
-        return 1 + max(left_height, right_height)
-
     # return number of nodes
     def size(self): 
         if self.root is None:
@@ -250,7 +277,7 @@ class BinaryTree:
         stack = []
         stack.append(self.root)
         size = 1
-        while stack != []:
+        while stack:
             node = stack.pop()
             if node.left:
                 size += 1
@@ -266,22 +293,17 @@ class BinaryTree:
     def is_balanced(self, node):
 
         queue = [node]
-        height = 0
         
-        while queue != []:
+        while queue:
             node = queue.pop(0)
-            
+            left_height = 0
+            right_height = 0
             if node.left:
                 left_height = self.depth(node.left)
                 queue.append(node.left)
-            else:
-                left_height = 0
             if node.right:
                 right_height = self.depth(node.right)
                 queue.append(node.right)
-            else:
-                right_height = 0
-
             if abs(left_height-right_height) > 1:
                 return False
         
@@ -292,7 +314,7 @@ class BinaryTree:
         depth = 0
         stack = [node]
 
-        while stack != []:
+        while stack:
             depth += 1
             level = []
             for node in stack: 
@@ -312,7 +334,7 @@ class BinaryTree:
         result = []
         level_count = 0
         
-        while queue != []:
+        while queue:
             level_count += 1
             level = []
             next_queue = []
@@ -390,7 +412,6 @@ print(tree.postorder(root)) # [4, 5, 2, 6, 7, 3, 1]
 print(tree.tree_paths(root)) # ['1->3->7', '1->3->6', '1->2->5', '1->2->4']
 print(tree.path_sums(root)) # [11, 10, 8, 7]
 print(tree.bfs(root)) # [1, 2, 3, 4, 5, 6, 7]
-print(tree.height_rec(root)) # 3
 print(tree.depth(root)) # 3
 print(tree.size()) # 7
 
@@ -403,6 +424,6 @@ tree.root.right.right.right = TreeNode(4)
 root = tree.get_root()
 print(tree.is_balanced(root))
 print(tree.depth(root))
-print(tree.height_rec(root))
+
 
 
