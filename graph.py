@@ -99,7 +99,6 @@ class Graph:
 
         return result
 
-
     # most basic bfs template
     # def bfs(start):
     #   queue = [start]
@@ -114,16 +113,17 @@ class Graph:
         path = [start.value]
         queue = [(start, path)]
         visited = set()
+        visited.add(start)
         
         while queue:
             vertex, path = queue.pop(0)
-            visited.add(vertex)
             vertices_to_visit = list(self.graph_dict[vertex.value].connections.keys())
             for vertex in vertices_to_visit:
                 if vertex not in visited:
                     if vertex == target:
                         return path + [vertex.value]
                     else:
+                        visited.add(vertex)
                         queue.append((vertex, path + [vertex.value]))
 
     def all_paths(self, start, end):
@@ -142,6 +142,44 @@ class Graph:
                         stack.append((vertex, path + [vertex.value]))
 
         return result
+
+    # cycle in undirected graph
+    def has_cycle(self, start):
+
+        stack = [start]
+        visited = set()
+        while stack:
+            vertex = stack.pop()
+            if vertex in visited:
+                return True
+            else:
+                visited.add(vertex)
+                vertices_to_visit = list(self.graph_dict[vertex.value].connections.keys())
+                for vertex in vertices_to_visit:
+                    if vertex not in visited:
+                        stack.append(vertex)
+        
+        return False
+
+# cycle in directed graph?
+# def dfs(crs, courses, visited):
+
+#     # if node is marked as visited during search, then cycle found
+#     if visited[crs] == -1:
+#         return False
+#     # if previously searched, no need to visit again 
+#     if visited[crs] == 1:
+#         return True
+#     # mark node as being visited
+#     visited[crs] = -1
+#     # visit all the neighbors
+#     for c in courses[crs]:
+#         if not dfs(c, courses, visited):
+#             return False
+#     # after all neighbors visited, mark it as fully searched
+#     visited[crs] = 1
+#     return True
+
 
 
 graph = Graph()
@@ -169,3 +207,4 @@ print(graph.dfs(A)) # ['A', 'C', 'E', 'D', 'B']
 print(graph.bfs(A)) # ['A', 'B', 'C', 'D', 'E']
 print(graph.shortest_path(A, E)) # ['A', 'C', 'E']
 print(graph.all_paths(A, E)) # [['A', 'C', 'E'], ['A', 'C', 'D', 'E'], ['A', 'B', 'D', 'E'], ['A', 'B', 'D', 'C', 'E']]
+print(graph.has_cycle(A)) # True
